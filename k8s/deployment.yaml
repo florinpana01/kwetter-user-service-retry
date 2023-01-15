@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec: 
+  selector:
+    matchLabels: 
+      app: user-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec: 
+      containers:
+        - name: user-service
+          image: florinpana01/user-service-repository
+          ports:
+            - containerPort: 8000
+          env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: user-service-secret
+                key: username
+          - name: DB_PASS
+            valueFrom: 
+              secretKeyRef:
+                name: user-service-secret
+                key: password
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: user-service-secret
+                key: database
+        - name: cloud-sql-proxy
+          image: gcr.io/cloudsql-docker/gce-proxy:1.28.0
+          command:
+            - "/cloud_sql_proxy"
+            - "-log_debug_stdout"
+            - "-instances=even-envoy-369215:europe-west1:kwetter-database=tcp:3306"
+            - "-credential_file=/secrets/service_account.json"
+          securityContext:
+            runAsNonRoot: true
+          volumeMounts:
+          - name: user-service-secret-volume
+            mountPath: /secrets/
+            readOnly: true
+      volumes:
+      - name: user-service-secret-volume
+        secret:
+          secretName: user-service-secret
