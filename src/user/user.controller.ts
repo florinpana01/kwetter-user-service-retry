@@ -15,39 +15,6 @@ constructor(
     ) {
 
 }
-
-    // @Get()
-    // all() {
-    //     return this.userService.all();
-    // }
-
-    // @EventPattern('hello')
-    // async hello(data: string){
-    //     console.log(data);
-    // }
-
-    // @Post('register')
-    // async register(
-    //     @Body('email') email: string,
-    //     @Body('firstName') firstName: string,
-    //     @Body('lastName') lastName: string,
-    //     @Body('username') username: string,
-    //     @Body('password') password: string
-    // ) {
-    //     const hashedPassword = await bcrypt.hash(password, 12);
-
-    //     //stopping the password from being displayed on the response, for security reasons
-    //     const user = await this.userService.create({
-    //         email,
-    //         firstName, 
-    //         lastName,
-    //         username,
-    //         password: hashedPassword
-    //     });
-
-    //     delete user.password;
-    //     return user; 
-    // }
     @EventPattern('user_request_all')
     async all() {
         console.log('getting all users');
@@ -63,31 +30,6 @@ constructor(
         return newUser;
     }
 
-    // @Post('login')
-    // async login(
-    //     @Body('email') email: string,
-    //     @Body('password') password: string,
-    //     @Res({passthrough: true}) response: Response
-    // ){
-    //     const user = await this.userService.findOne({email});
-
-    //     if(!user) {
-    //         throw new BadRequestException('invalid credentials');
-    //     }
-
-    //     if(!await bcrypt.compare(password, user.password)){
-    //         throw new BadRequestException('invalid credentials');
-    //     }
-
-    //     const jwt = await this.jwtService.signAsync({id: user.id});
-
-    //     response.cookie('jwt', jwt, {httpOnly: true});
-
-    //     return {
-    //         message: 'success'
-    //     };
-    // }
-
      @EventPattern('user_login_gateway')
      async login(data) {
          console.log("user_login_gateway data", data);
@@ -96,39 +38,6 @@ constructor(
          //this.client.emit('user_login_gateway', user);
          return user;
      }
-
-    // @Get('user')
-    // async user(@Req() request: Request) {
-    //     try{
-    //     const cookie = request.cookies['jwt'];
-
-    //     const data = await this.jwtService.verifyAsync(cookie);
-
-    //     if(!data) {
-    //         throw new UnauthorizedException();
-    //     }
-
-    //     const user = await this.userService.findOne({id: data['id']});
-
-    //     //stopping the password from being displayed on the response, for security reasons
-
-    //     const {password, ...result} = user;
-
-    //     return result;
-    //     }
-    //     catch(e){
-    //         throw new UnauthorizedException();
-    //     }
-    // }
-
-    // @Post('logout')
-    // async logout(@Res({passthrough: true}) response: Response
-    // ){
-    //     response.clearCookie('jwt');
-    //     return {
-    //         message: 'logged out'
-    //     }
-    // }
 
     @EventPattern('user_logout_gateway')
     async logout(data) {
