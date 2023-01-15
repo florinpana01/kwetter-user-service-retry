@@ -43,10 +43,10 @@ spec:
           securityContext:
             runAsNonRoot: true
           volumeMounts:
-          - name: user-service-secret-volume
+          - name: api-gateway-secret-volume
             mountPath: /secrets/
             readOnly: true
       volumes:
-      - name: user-service-secret-volume
+      - name: api-gateway-secret-volume
         secret:
-          secretName: user-service-secret
+          secretName: api-gateway-secret
